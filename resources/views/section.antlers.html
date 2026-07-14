@@ -1,0 +1,157 @@
+{{ collection:comments site="{ comments_site }" blog_entry_id:is="{ blog_entry_id }" parent_comment:doesnt_exist="true" sort="commented_at:desc" paginate="{ per_page }" as="comments" }}
+<!-- start comments section -->
+<div class="relative 1xl:mb-20 lg:mb-[70px] md:mb-[50px] mb-8 z-1" data-comments-variant="{{ variant }}">
+    <div class="2xl:mb-8 xl:mb-6 mb-5">
+        {{ if variant == "three" }}
+        <h4 class="m-0 font-normal">{{ trans key="Comments" }} ({{ if no_results }}0{{ else }}{{ total_results }}{{ /if }})</h4>
+        {{ else }}
+        <h3 class="m-0 font-normal">{{ trans key="Comments" }} ({{ if no_results }}0{{ else }}{{ total_results }}{{ /if }})</h3>
+        {{ /if }}
+    </div>
+
+    <div class="comments-list grid_append flex flex-col gap-5">
+        {{ comments }}
+        <article class="grid-item-append bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 p-5 sm:p-6">
+            <div class="flex items-start gap-4 sm:gap-5">
+                <div class="comment-avatar-initial shrink-0 rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center text-white font-el-messiri font-semibold text-xl leading-none select-none" style="background-color: {{ author_name | avatar_color }}" aria-hidden="true">{{ author_name | avatar_initial }}</div>
+                <div class="w-full min-w-0">
+                    <div class="flex items-center justify-between gap-3 mb-1.5">
+                        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 min-w-0">
+                            <h4 class="text-lg font-el-messiri font-semibold text-black leading-tight m-0">{{ author_name }}</h4>
+                            <span class="text-sm text-gray-600">{{ commented_at_display }}</span>
+                        </div>
+                        <a href="javascript:;" data-blog_id="{{ blog_entry_id }}" data-parent_id="{{ id }}" data-author-name="{{ author_name }}"
+                            class="comment-reply-btn shrink-0 inline-flex items-center gap-1.5 text-sm font-medium text-primary-900 border border-primary-900/25 hover:bg-primary-900 hover:text-white hover:border-primary-900 rounded-full px-3.5 py-1.5 transition-colors">
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 18L0 10L10 2V7C15.523 7 20 11.477 20 17C20 17.2733 19.9893 17.5433 19.968 17.81C19.2043 16.3582 18.0584 15.1428 16.654 14.295C15.2497 13.4473 13.6404 12.9995 12 13H10V18Z" /></svg>
+                            {{ trans key="Reply" }}
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-600 font-normal leading-relaxed m-0">{{ message }}</p>
+                </div>
+            </div>
+
+            {{ collection:comments site="{ comments_site }" blog_entry_id:is="{ blog_entry_id }" parent_comment:is="{ id }" sort="commented_at:asc" as="replies" }}
+            {{ if no_results }}{{ else }}
+            <div class="comment-replies mt-5 flex flex-col gap-4 ml-5 sm:ml-12">
+                {{ replies }}
+                <div class="comment-reply-wrap relative bg-white border border-gray-200 rounded-2xl shadow-sm py-4 sm:py-5 pr-4 sm:pr-5 pl-9 sm:pl-11">
+                    <span aria-hidden="true" class="comment-thread-branch pointer-events-none absolute left-2 sm:left-2.5 top-4 bottom-4 w-1.5 rounded-full bg-primary-900"></span>
+                    <div class="flex items-start gap-3 sm:gap-4">
+                        <div class="comment-avatar-initial shrink-0 rounded-full w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-white font-el-messiri font-semibold text-base leading-none select-none" style="background-color: {{ author_name | avatar_color }}" aria-hidden="true">{{ author_name | avatar_initial }}</div>
+                        <div class="w-full min-w-0">
+                            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 mb-1">
+                                <h5 class="text-base font-el-messiri font-semibold text-black leading-tight m-0">{{ author_name }}</h5>
+                                <span class="text-sm text-gray-600">{{ commented_at_display }}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 font-normal leading-relaxed m-0">{{ message }}</p>
+                        </div>
+                    </div>
+                </div>
+                {{ /replies }}
+            </div>
+            {{ /if }}
+            {{ /collection:comments }}
+        </article>
+        {{ /comments }}
+    </div>
+
+    {{ paginate }}
+    <input type="hidden" class="lastPage" value="{{ total_pages }}">
+    <input type="hidden" class="currentPage" value="{{ current_page }}">
+    {{ if next_page }}
+    <div class="load-more-wrap mt-6 flex justify-center">
+        <div class="load-btn text-center">
+            <a href="{{ next_page }}" class="btn btn-primary gap-2 ajax-load-more-grid">{{ trans key="Load More" }}
+                <img src="{{ theme:asset }}assets/images/loading-spinner.svg" alt="loader" class="loading-spin object-cover animate-spin hidden"></a>
+        </div>
+    </div>
+    {{ /if }}
+    {{ /paginate }}
+</div>
+{{ /collection:comments }}
+<!-- end comments section -->
+
+<!-- Start Leave Comment section (card) -->
+<section class="relative overflow-visible 2xl:mb-[100px] 1xl:mb-20 lg:mb-[70px] md:mb-[50px] mb-8 z-1" id="comment-form">
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 p-5 sm:p-8">
+        {{ setting }}
+        <div class="2xl:mb-8 xl:mb-6 mb-5">
+            {{ if variant == "three" }}
+            <h4 class="font-medium 1xl:mb-3 mb-2">{{ sub_comment_title }}</h4>
+            {{ elseif variant == "one" }}
+            <h2 class="font-medium 1xl:mb-3 mb-2">{{ sub_comment_title }}</h2>
+            {{ else }}
+            <h3 class="font-medium 1xl:mb-3 mb-2">{{ sub_comment_title }}</h3>
+            {{ /if }}
+            <p class="text-black m-0">{{ section_comment_description }}</p>
+        </div>
+        {{ /setting }}
+
+        {{ form:blog_comment id="commentForm" ajax="true" novalidate data-success-message="{pending_message}" }}
+        {{ csrf }}
+        <input type="text" name="{{ honeypot }}" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" id="blog_id" name="blog_id" class="d-none" value="{{ blog_entry_id }}" />
+        <input type="hidden" id="parent_id" name="parent_id" class="d-none" value="null" />
+
+        <div class="comment-reply-context hidden mb-5 flex items-center gap-3 rounded-xl border border-primary-900/25 bg-primary-900/5 pl-3 pr-4 py-3">
+            <span aria-hidden="true" class="w-1.5 self-stretch rounded-full bg-primary-900 shrink-0"></span>
+            <p class="p2 m-0 flex flex-wrap items-center gap-x-2 gap-y-1 w-full text-primary-900">
+                <span>{{ trans key="Replying to comment:" }}</span>
+                <strong class="reply-target-name font-semibold"></strong>
+                <button type="button" class="reply-cancel-main ml-auto p2 text-primary-900 underline underline-offset-2 hover:text-black transition-colors">
+                    {{ trans key="Cancel reply" }}
+                </button>
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {{ fields }}
+            {{ if type == "textarea" }}
+            <div class="relative sm:col-span-2 col-span-1">
+                <label for="{{ handle }}" class="block mb-2 text-base font-lexend font-light text-black">
+                    {{ trans :key="display" }}{{ validate }}{{ if value == "required" }} *{{ /if }}{{ /validate }}
+                </label>
+                <textarea id="{{ handle }}" name="{{ handle }}" rows="4" class="w-full rounded-xl border border-gray-400 focus:border-primary-900 focus:ring-1 focus:ring-primary-900 outline-none px-4 py-3 min-h-[120px] resize-y transition-colors text-base font-lexend"></textarea>
+                <div class="text-red-500 mt-2 opacity-0 transition-all ease-in-out error-message hidden items-center gap-2" data-error-for="{{ handle }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                        <path d="M9.35 9.35H7.65V4.25H9.35M9.35 12.75H7.65V11.05H9.35M8.5 0C7.38376 0 6.27846 0.219859 5.24719 0.647024C4.21592 1.07419 3.27889 1.70029 2.48959 2.48959C0.895533 4.08365 0 6.24566 0 8.5C0 10.7543 0.895533 12.9163 2.48959 14.5104C3.27889 15.2997 4.21592 15.9258 5.24719 16.353C6.27846 16.7801 7.38376 17 8.5 17C10.7543 17 12.9163 16.1045 14.5104 14.5104C16.1045 12.9163 17 10.7543 17 8.5C17 7.38376 16.7801 6.27846 16.353 5.24719C15.9258 4.21592 15.2997 3.27889 14.5104 2.48959C13.7211 1.70029 12.7841 1.07419 11.7528 0.647024C10.7215 0.219859 9.61624 0 8.5 0Z" fill="#D21C1C" />
+                    </svg>
+                    <span class="field-error error-text p2" data-error-for="{{ handle }}"></span>
+                </div>
+            </div>
+            {{ elseif handle != "blog_id" and handle != "parent_id" }}
+            <div class="relative">
+                <label for="{{ handle }}" class="block mb-2 text-base font-lexend font-light text-black">
+                    {{ trans :key="display" }}{{ validate }}{{ if value == "required" }} *{{ /if }}{{ /validate }}
+                </label>
+                <input type="{{ if handle == 'email' }}email{{ else }}{{ type }}{{ /if }}" id="{{ handle }}" name="{{ handle }}" class="w-full rounded-xl border border-gray-400 focus:border-primary-900 focus:ring-1 focus:ring-primary-900 outline-none px-4 py-3 transition-colors text-base font-lexend" />
+                <div class="text-red-500 mt-2 opacity-0 transition-all ease-in-out error-message hidden items-center gap-2" data-error-for="{{ handle }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                        <path d="M9.35 9.35H7.65V4.25H9.35M9.35 12.75H7.65V11.05H9.35M8.5 0C7.38376 0 6.27846 0.219859 5.24719 0.647024C4.21592 1.07419 3.27889 1.70029 2.48959 2.48959C0.895533 4.08365 0 6.24566 0 8.5C0 10.7543 0.895533 12.9163 2.48959 14.5104C3.27889 15.2997 4.21592 15.9258 5.24719 16.353C6.27846 16.7801 7.38376 17 8.5 17C10.7543 17 12.9163 16.1045 14.5104 14.5104C16.1045 12.9163 17 10.7543 17 8.5C17 7.38376 16.7801 6.27846 16.353 5.24719C15.9258 4.21592 15.2997 3.27889 14.5104 2.48959C13.7211 1.70029 12.7841 1.07419 11.7528 0.647024C10.7215 0.219859 9.61624 0 8.5 0Z" fill="#D21C1C" />
+                    </svg>
+                    <span class="field-error error-text p2" data-error-for="{{ handle }}"></span>
+                </div>
+            </div>
+            {{ /if }}
+            {{ /fields }}
+        </div>
+
+        <div class="mt-5">
+            {{ captcha }}
+            {{ if error:captcha }}
+            <p class="text-red-500 text-sm mt-2">{{ error:captcha }}</p>
+            {{ /if }}
+            <div class="text-red-500 mt-2 opacity-0 transition-all ease-in-out error-message hidden items-center gap-2" data-error-for="captcha">
+                <span class="field-error error-text p2" data-error-for="captcha"></span>
+            </div>
+        </div>
+
+        {{ setting }}
+        <button type="submit" class="btn btn-primary mt-6">{{ comment_button_text }}</button>
+        {{ /setting }}
+
+        <p id="successMessage" class="form-message bg-primary-900/12 hidden mt-5 w-fit text-primary-900 px-4 py-2 rounded-lg transition-all"></p>
+        {{ /form:blog_comment }}
+    </div>
+</section>
+<!-- End Let's Comment section -->

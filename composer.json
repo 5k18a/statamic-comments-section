@@ -1,0 +1,51 @@
+{
+    "name": "skalisty/comments",
+    "description": "Entry-based blog comments for Statamic 6 with moderation and a global kill switch.",
+    "license": "MIT",
+    "homepage": "https://github.com/5k18a/statamic-comments-section",
+    "authors": [
+        {
+            "name": "Marcin Skibicki",
+            "homepage": "https://github.com/5k18a"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/5k18a/statamic-comments-section/issues",
+        "source": "https://github.com/5k18a/statamic-comments-section"
+    },
+    "keywords": [
+        "comments",
+        "entries",
+        "laravel",
+        "moderation",
+        "statamic",
+        "statamic-addon"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Skalisty\\Comments\\": "src"
+        }
+    },
+    "require": {
+        "php": "^8.4",
+        "statamic/cms": "^6.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Skalisty Comments",
+            "description": "Entry-based blog comments with moderation and a global kill switch."
+        },
+        "laravel": {
+            "providers": [
+                "Skalisty\\Comments\\ServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
