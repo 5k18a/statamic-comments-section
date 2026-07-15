@@ -36,7 +36,7 @@ const props = defineProps({
 
 const cards = ref([...props.cards]);
 const selectedSite = ref('all');
-const activeBlogId = ref(cards.value[0]?.blog_entry_id ?? null);
+const expandedBlogId = ref(cards.value[0]?.blog_entry_id ?? null);
 const listing = ref(null);
 const selectedComment = ref(null);
 const commentModalOpen = ref(false);
@@ -77,18 +77,20 @@ const filteredCards = computed(() => {
     return cards.value.filter((card) => card.site === selectedSite.value);
 });
 
-const activeCard = computed(() => cards.value.find((card) => card.blog_entry_id === activeBlogId.value) ?? null);
+function setListingRef(el) {
+    listing.value = el;
+}
 
 function selectSite(site) {
     selectedSite.value = site;
 
-    if (!filteredCards.value.some((card) => card.blog_entry_id === activeBlogId.value)) {
-        activeBlogId.value = filteredCards.value[0]?.blog_entry_id ?? null;
+    if (!filteredCards.value.some((card) => card.blog_entry_id === expandedBlogId.value)) {
+        expandedBlogId.value = filteredCards.value[0]?.blog_entry_id ?? null;
     }
 }
 
-function selectCard(card) {
-    activeBlogId.value = card.blog_entry_id;
+function toggleCard(card) {
+    expandedBlogId.value = expandedBlogId.value === card.blog_entry_id ? null : card.blog_entry_id;
 }
 
 function refreshRows() {
@@ -98,8 +100,8 @@ function refreshRows() {
 function syncCards(nextCards) {
     cards.value = [...nextCards];
 
-    if (!cards.value.some((card) => card.blog_entry_id === activeBlogId.value)) {
-        activeBlogId.value = filteredCards.value[0]?.blog_entry_id ?? cards.value[0]?.blog_entry_id ?? null;
+    if (!cards.value.some((card) => card.blog_entry_id === expandedBlogId.value)) {
+        expandedBlogId.value = null;
     }
 }
 
@@ -228,87 +230,63 @@ function actionBusy(row, action) {
             text="Brak komentarzy do moderacji."
         />
 
-        <div v-else class="grid gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
-            <div class="space-y-3">
-                <Card
-                    v-for="card in filteredCards"
-                    :key="card.blog_entry_id"
-                    class="cursor-pointer p-4 transition"
-                    :class="{ 'ring-2 ring-blue-500': activeBlogId === card.blog_entry_id }"
-                    @click="selectCard(card)"
+        <div v-else class="space-y-3">
+            <Card
+                v-for="card in filteredCards"
+                :key="card.blog_entry_id"
+                class="overflow-hidden p-0"
+            >
+                <button
+                    type="button"
+                    class="flex w-full items-start gap-3 p-4 text-left transition hover:bg-gray-50 dark:hover:bg-gray-800"
+                    :aria-expanded="expandedBlogId === card.blog_entry_id"
+                    @click="toggleCard(card)"
                 >
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="min-w-0">
-                            <div class="flex flex-wrap items-center gap-2">
-                                <Badge :text="card.site_label" size="sm" />
-                                <Badge
-                                    v-if="card.missing_blog"
-                                    color="amber"
-                                    text="Wpis usunięty"
-                                    size="sm"
-                                />
-                            </div>
-                            <h2 class="mt-2 truncate text-base font-semibold">{{ card.title }}</h2>
-                            <p class="mt-1 text-xs text-gray-600">
-                                Ostatni komentarz: {{ card.latest_at || 'brak daty' }}
-                            </p>
-                        </div>
-                        <Badge :text="String(card.count)" color="blue" pill />
-                    </div>
-
-                    <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                        <Badge color="amber" :text="`Drafty: ${card.draft_count}`" size="sm" />
-                        <Badge color="green" :text="`Live: ${card.published_count}`" size="sm" />
-                    </div>
-
-                    <div v-if="card.edit_url || card.public_url" class="mt-3 flex gap-2">
-                        <Button
-                            v-if="card.edit_url"
-                            size="xs"
-                            variant="subtle"
-                            text="Edytuj wpis"
-                            :href="card.edit_url"
-                            @click.stop
-                        />
-                        <Button
-                            v-if="card.public_url"
-                            size="xs"
-                            variant="subtle"
-                            text="Otwórz"
-                            :href="card.public_url"
-                            target="_blank"
-                            @click.stop
-                        />
-                    </div>
-                </Card>
-            </div>
-
-            <Card v-if="activeCard" class="p-0">
-                <div class="border-b border-gray-200 p-4 dark:border-gray-700">
-                    <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <div class="flex flex-wrap items-center gap-2">
-                                <Badge :text="activeCard.site_label" size="sm" />
-                                <Badge :text="`${activeCard.count} komentarzy`" color="blue" size="sm" />
-                            </div>
-                            <h2 class="mt-2 text-lg font-semibold">{{ activeCard.title }}</h2>
-                        </div>
-                        <Button size="sm" text="Odśwież listę" @click="refreshRows" />
-                    </div>
-                </div>
-
-                <div class="p-4">
-                    <Listing
-                        ref="listing"
-                        :key="activeCard.blog_entry_id"
-                        :url="activeCard.rows_url"
-                        :allow-bulk-actions="false"
-                        :allow-presets="false"
-                        :allow-customizing-columns="false"
-                        sort-column="commented_at"
-                        sort-direction="desc"
-                        :per-page="15"
+                    <svg
+                        class="mt-1 size-4 shrink-0 text-gray-500 transition-transform"
+                        :class="{ 'rotate-90': expandedBlogId === card.blog_entry_id }"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
                     >
+                        <path fill-rule="evenodd" d="M7.293 4.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414-1.414L11.586 10 7.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <Badge :text="card.site_label" size="sm" />
+                            <Badge v-if="card.missing_blog" color="amber" text="Wpis usunięty" size="sm" />
+                        </div>
+                        <h2 class="mt-2 truncate text-base font-semibold">{{ card.title }}</h2>
+                        <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                            <Badge color="amber" :text="`Drafty: ${card.draft_count}`" size="sm" />
+                            <Badge color="green" :text="`Live: ${card.published_count}`" size="sm" />
+                            <span class="text-gray-600">Ostatni: {{ card.latest_at || 'brak daty' }}</span>
+                        </div>
+                    </div>
+                    <Badge :text="String(card.count)" color="blue" pill />
+                </button>
+
+                <div
+                    v-if="expandedBlogId === card.blog_entry_id"
+                    class="border-t border-gray-200 dark:border-gray-700"
+                >
+                    <div class="flex items-center justify-end gap-2 px-4 pt-3">
+                        <Button v-if="card.edit_url" size="xs" variant="subtle" text="Edytuj wpis" :href="card.edit_url" />
+                        <Button v-if="card.public_url" size="xs" variant="subtle" text="Otwórz" :href="card.public_url" target="_blank" />
+                        <Button size="xs" text="Odśwież" @click="refreshRows" />
+                    </div>
+
+                    <div class="p-4">
+                        <Listing
+                            :ref="setListingRef"
+                            :url="card.rows_url"
+                            :allow-bulk-actions="false"
+                            :allow-presets="false"
+                            :allow-customizing-columns="false"
+                            sort-column="commented_at"
+                            sort-direction="desc"
+                            :per-page="15"
+                        >
                         <template #cell-author="{ row }">
                             <div class="flex items-center gap-3" :class="{ 'ps-8': row.depth > 0 }">
                                 <Avatar :user="row.avatar" />
@@ -363,7 +341,8 @@ function actionBusy(row, action) {
                                 @click="askDelete(row)"
                             />
                         </template>
-                    </Listing>
+                        </Listing>
+                    </div>
                 </div>
             </Card>
         </div>

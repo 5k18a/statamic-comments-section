@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Changed the Control Panel panel layout to an **inline accordion**: each blog card now expands its comment list directly beneath it (chevron toggle, one open at a time, listing lazy-loaded on first expand), replacing the previous two-column master-detail. Fixes the confusing "clickable card that appears to do nothing" when a blog was already selected.
+
 ## 0.2.0
 
 - Added a Control Panel moderation panel under **Tools › Comments** (native Statamic Utility rendered with Inertia/Vue + the `@statamic/cms/ui` kit).
