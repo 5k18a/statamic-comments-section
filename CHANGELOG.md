@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0
+
+- Added a Control Panel moderation panel under **Tools › Comments** (native Statamic Utility rendered with Inertia/Vue + the `@statamic/cms/ui` kit).
+  - Comments grouped into per-blog-entry cards across all site locales (no CP site switching); cards show published/draft/all counts; only blogs with at least one comment appear.
+  - Per-blog comment listing loaded lazily from a JSON endpoint (search, sorting, pagination); replies nested under their parent.
+  - Full-comment modal (name, email, full text, date) and inline row actions.
+  - Moderation actions: publish / unpublish (native `published` status) and delete with **cascade** (removing a top-level comment removes its replies).
+  - Panel stays available even when front-end comments are disabled, so moderation is always possible.
+- Registered `access comments_manager utility` permission (CP routes gated by it).
+
 ## 0.1.0
 
 - Added entry-based blog comments collection integration.

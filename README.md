@@ -16,6 +16,7 @@ A self-contained Statamic addon that adds **entry-based blog comments** with mod
 - **Global kill switch** — enable/disable the whole system from a Global Set; when off, nothing renders on the front end and the submission listener is inert.
 - **Static-cache aware** — the related blog entry's static cache is invalidated automatically whenever a comment is created, published, or deleted.
 - **Deterministic avatars** — `avatar_initial` and `avatar_color` modifiers generate initial-based avatars with a stable per-author color (no uploads, no Gravatar dependency).
+- **Moderation panel (Control Panel)** — a **Tools › Comments** utility (native Statamic UI kit, Inertia/Vue) to browse comments grouped per blog entry across all locales, with a lazy per-blog listing, full-comment modal, and inline publish / unpublish / cascade-delete. Available even when front-end comments are disabled.
 - **Migration command** — convert existing form submissions into comment entries.
 
 ## Requirements
@@ -117,7 +118,8 @@ php please comments:migrate --dry-run  # preview without writing
 
 ## Roadmap
 
-- Control-Panel management panel (Tools) — browse comments grouped by blog entry, publish/unpublish and delete inline, built with the native Statamic UI kit.
+- Packagist listing for a plain `composer require skalisty/comments`.
+- Optional email notifications on new comments.
 
 ## License
 
