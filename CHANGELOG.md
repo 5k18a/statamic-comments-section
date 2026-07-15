@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Localized the Control Panel comment-listing search placeholder to Polish ("Szukaj komentarzy"). Scoped to this panel only (the Statamic UI Listing hardcodes the placeholder, so it is set locally after mount rather than via a global CP translation).
+
 ## 0.2.1
 
 - Changed the Control Panel panel layout to an **inline accordion**: each blog card now expands its comment list directly beneath it (chevron toggle, one open at a time, listing lazy-loaded on first expand), replacing the previous two-column master-detail. Fixes the confusing "clickable card that appears to do nothing" when a blog was already selected.

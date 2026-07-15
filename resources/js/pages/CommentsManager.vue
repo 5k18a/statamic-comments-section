@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios';
-import { computed, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import {
     Avatar,
     Badge,
@@ -79,6 +79,31 @@ const filteredCards = computed(() => {
 
 function setListingRef(el) {
     listing.value = el;
+
+    if (!el) {
+        return;
+    }
+
+    // Kit ListingSearch hardcoduje placeholder przez __('Search...') (brak propa).
+    // CP tego projektu bywa w locale EN, a globalny override zmieniłby wszystkie listingi.
+    // Ustawiamy placeholder po polsku lokalnie po zamontowaniu Listingu (Vue nie cofnie —
+    // wartość bindingu się nie zmienia, więc nie jest re-patchowana).
+    let tries = 0;
+    const localizeSearch = () => {
+        const input = document.getElementById('listings-search');
+        if (input) {
+            input.setAttribute('placeholder', 'Szukaj komentarzy');
+            const label = document.querySelector('label[for="listings-search"]');
+            if (label) {
+                label.textContent = 'Szukaj komentarzy';
+            }
+            return;
+        }
+        if (tries++ < 10) {
+            setTimeout(localizeSearch, 30);
+        }
+    };
+    nextTick(localizeSearch);
 }
 
 function selectSite(site) {
