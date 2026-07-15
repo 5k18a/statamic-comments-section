@@ -63,7 +63,7 @@ class ServiceProvider extends AddonServiceProvider
                 ->title(__('Komentarze'))
                 ->navTitle(__('Komentarze'))
                 ->description(__('Moderacja komentarzy blogowych ze wszystkich języków.'))
-                ->icon('comments')
+                ->icon('mail-chat-bubble-text')
                 ->inertia('comments::manager', fn () => app(CommentsUtilityController::class)->indexData())
                 ->routes(function ($router): void {
                     $router->get('rows/{blogEntryId}', [CommentsUtilityController::class, 'rows'])->name('rows');

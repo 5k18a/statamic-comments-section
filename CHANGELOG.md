@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3
+
+- Fixed the Control Panel utility icon (Tools > Comments). The previous `comments` icon name does not exist in the Statamic 6 icon set, so the utility rendered without an icon; switched to `mail-chat-bubble-text` (a chat bubble with text lines). Note: in-panel action and empty-state icons still use legacy Statamic 5 names and are tracked for a follow-up.
+
 ## 0.2.2
 
 - Localized the Control Panel comment-listing search placeholder to Polish ("Szukaj komentarzy"). Scoped to this panel only (the Statamic UI Listing hardcodes the placeholder, so it is set locally after mount rather than via a global CP translation).
