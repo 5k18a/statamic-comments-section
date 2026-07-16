@@ -75,6 +75,7 @@ The addon expects:
 
 1. A **`comments` collection** (site handle matching `config('comments.site')`) using the bundled `comment` blueprint fields: `title`, `author_name`, `author_email`, `message`, `commented_at`, `blog_entry_id`, `parent_comment`, `source_submission_id`.
 2. A **form** (default handle `blog_comment`) whose submissions are converted into comment entries. Hidden fields `blog_id` (the blog entry id) and `parent_id` (optional parent comment id) drive the association and threading.
+   - **Recommended: set `store: false` on this form.** Statamic still dispatches `SubmissionCreated` even when storing is disabled, so the addon's listener creates the comment entry as usual — but no redundant form submission is persisted on disk (otherwise every comment is saved twice: once under *Forms › Blog Comments* and once as a comment entry). reCAPTCHA/honeypot validation is unaffected; it runs before the submission is created.
 
 ## Usage
 
