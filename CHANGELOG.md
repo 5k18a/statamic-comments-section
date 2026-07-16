@@ -1,9 +1,5 @@
 # Changelog
 
-## 0.2.5
-
-- Added an explicit close (X) button to the comment detail modal (top-right). The modal was already dismissible by clicking outside; the X gives a clearer affordance. Uses the kit `ModalClose` + `x` icon.
-
 ## 0.2.4
 
 - Fixed blank in-panel Control Panel icons (Statamic 6 renamed several icons in its set). Remapped to existing S6 icons: `comments` -> `mail-chat-bubble-text` (empty state + detail modal), `check` -> `checkmark` (publish), `remove` -> `eye-slash` (unpublish), `view` -> `eye` (view details); `trash` unchanged. Rebuilt the CP bundle.

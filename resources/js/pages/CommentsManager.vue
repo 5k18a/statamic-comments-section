@@ -10,10 +10,8 @@ import {
     DropdownItem,
     EmptyStateItem,
     Heading,
-    Icon,
     Listing,
     Modal,
-    ModalClose,
     StatusIndicator,
 } from '@statamic/cms/ui';
 
@@ -379,13 +377,6 @@ function actionBusy(row, action) {
             title="Szczegóły komentarza"
             icon="mail-chat-bubble-text"
         >
-            <ModalClose
-                class="absolute end-3 top-3 z-20 grid size-8 place-items-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800"
-            >
-                <Icon name="x" class="size-4" />
-                <span class="sr-only">Zamknij</span>
-            </ModalClose>
-
             <div v-if="selectedComment" class="space-y-4">
                 <div class="flex items-center gap-3">
                     <Avatar :user="selectedComment.avatar" />
