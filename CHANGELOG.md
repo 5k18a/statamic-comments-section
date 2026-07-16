@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4
+
+- Fixed blank in-panel Control Panel icons (Statamic 6 renamed several icons in its set). Remapped to existing S6 icons: `comments` -> `mail-chat-bubble-text` (empty state + detail modal), `check` -> `checkmark` (publish), `remove` -> `eye-slash` (unpublish), `view` -> `eye` (view details); `trash` unchanged. Rebuilt the CP bundle.
+
 ## 0.2.3
 
 - Fixed the Control Panel utility icon (Tools > Comments). The previous `comments` icon name does not exist in the Statamic 6 icon set, so the utility rendered without an icon; switched to `mail-chat-bubble-text` (a chat bubble with text lines). Note: in-panel action and empty-state icons still use legacy Statamic 5 names and are tracked for a follow-up.

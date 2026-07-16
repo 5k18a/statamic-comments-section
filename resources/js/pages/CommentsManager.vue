@@ -251,7 +251,7 @@ function actionBusy(row, action) {
 
         <EmptyStateItem
             v-if="cards.length === 0"
-            icon="comments"
+            icon="mail-chat-bubble-text"
             text="Brak komentarzy do moderacji."
         />
 
@@ -345,18 +345,18 @@ function actionBusy(row, action) {
                             <DropdownItem
                                 v-if="!row.published"
                                 text="Publikuj"
-                                icon="check"
+                                icon="checkmark"
                                 @click="postAction(row, row.publish_url)"
                             />
                             <DropdownItem
                                 v-else
                                 text="Cofnij publikację"
-                                icon="remove"
+                                icon="eye-slash"
                                 @click="postAction(row, row.unpublish_url)"
                             />
                             <DropdownItem
                                 text="Pokaż pełne dane"
-                                icon="view"
+                                icon="eye"
                                 @click="showComment(row)"
                             />
                             <DropdownItem
@@ -375,7 +375,7 @@ function actionBusy(row, action) {
         <Modal
             v-model:open="commentModalOpen"
             title="Szczegóły komentarza"
-            icon="comments"
+            icon="mail-chat-bubble-text"
         >
             <div v-if="selectedComment" class="space-y-4">
                 <div class="flex items-center gap-3">
