@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6
+
+- Added the `blog_comment` action to the CAPTCHA tag for Cloudflare Turnstile analytics and policy enforcement.
+
 ## 0.2.4
 
 - Fixed blank in-panel Control Panel icons (Statamic 6 renamed several icons in its set). Remapped to existing S6 icons: `comments` -> `mail-chat-bubble-text` (empty state + detail modal), `check` -> `checkmark` (publish), `remove` -> `eye-slash` (unpublish), `view` -> `eye` (view details); `trash` unchanged. Rebuilt the CP bundle.

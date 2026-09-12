@@ -137,7 +137,7 @@
         </div>
 
         <div class="mt-5">
-            {{ captcha }}
+            {{ captcha data-action="blog_comment" }}
             {{ if error:captcha }}
             <p class="text-red-500 text-sm mt-2">{{ error:captcha }}</p>
             {{ /if }}
